@@ -1,0 +1,368 @@
+/* ========== THEME VARIABLES AND TOGGLE ========== */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.theme-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-tertiary: #2d2d2d;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #909090;
+  --border-color: #444;
+  --card-bg: #2d2d2d;
+  --btn-primary-bg: #3498db;
+  --btn-primary-text: white;
+  --btn-danger-bg: #e74c3c;
+  --btn-success-bg: #27ae60;
+  --btn-warning-bg: #f39c12;
+
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+/* ========== CORE LAYOUT ELEMENTS ========== */
+.dark-theme body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.dark-theme .header,
+.dark-theme .footer {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.dark-theme .sidebar,
+.dark-theme .content {
+  background-color: var(--bg-secondary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== NAVIGATION MENU ========== */
+.dark-theme .nav-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .nav-menu li.active {
+  background-color: var(--btn-primary-bg);
+}
+
+/* ========== TABLES AND DATA DISPLAY ========== */
+.dark-theme .students-table th,
+.dark-theme .students-table td,
+.dark-theme .teachers-table th,
+.dark-theme .teachers-table td,
+.dark-theme .users-table th,
+.dark-theme .users-table td {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-theme .students-table th,
+.dark-theme .teachers-table th,
+.dark-theme .users-table th {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.dark-theme .students-table tr:hover,
+.dark-theme .teachers-table tr:hover,
+.dark-theme .users-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Fix for "Students by Section" text and cards */
+.dark-theme .section-enrollment h4,
+.dark-theme .grade-enrollment h4 {
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* ========== STUDENT SECTION CARDS ========== */
+/* Fix for the Students by Section cards */
+.dark-theme [class^="section"] {
+  color: #333 !important; /* Ensure text is dark on light backgrounds */
+}
+
+/* If the section cards themselves need a dark theme */
+.dark-theme .section-card {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* If the section cards remain light in dark mode, ensure the numbers are visible */
+.dark-theme .section-card h3,
+.dark-theme .section-card .count {
+  color: #333 !important; /* Force dark text on light backgrounds */
+}
+
+/* ========== FORM ELEMENTS ========== */
+.dark-theme .form-control,
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.dark-theme .form-control:focus,
+.dark-theme input:focus,
+.dark-theme select:focus,
+.dark-theme textarea:focus {
+  border-color: var(--btn-primary-bg);
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+.dark-theme input[disabled],
+.dark-theme select[disabled],
+.dark-theme textarea[disabled] {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-tertiary);
+}
+
+.dark-theme label {
+  color: var(--text-secondary);
+}
+
+.dark-theme .detail-item label {
+  color: var(--text-tertiary);
+}
+
+/* ========== DASHBOARD COMPONENTS ========== */
+.dark-theme .panel-header {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-theme .profile-section h3,
+.dark-theme .form-section h3 {
+  border-bottom-color: var(--border-color);
+}
+
+.dark-theme .stat-box {
+  background-color: var(--bg-tertiary);
+}
+
+.dark-theme .stat-box h4 {
+  color: var(--text-secondary);
+}
+
+.dark-theme .stat-value {
+  color: var(--text-primary);
+}
+
+/* ========== DASHBOARD CARDS ========== */
+/* Student count and summary cards */
+.dark-theme .summary-card,
+.dark-theme .count-card {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.dark-theme .summary-card h3,
+.dark-theme .count-card h3 {
+  color: var(--text-primary);
+}
+
+.dark-theme .summary-card p,
+.dark-theme .count-card p {
+  color: var(--text-secondary);
+}
+
+.dark-theme .count-card .count,
+.dark-theme .summary-card .count {
+  color: var(--text-primary);
+}
+
+/* ========== BUTTONS ========== */
+.dark-theme .view-button,
+.dark-theme .print-button {
+  background-color: var(--btn-primary-bg);
+}
+
+.dark-theme .edit-button {
+  background-color: var(--btn-warning-bg);
+}
+
+.dark-theme .delete-button {
+  background-color: var(--btn-danger-bg);
+}
+
+.dark-theme .add-button,
+.dark-theme .submit-button {
+  background-color: var(--btn-success-bg);
+}
+
+.dark-theme .save-button {
+  background-color: var(--btn-primary-bg);
+}
+
+.dark-theme .cancel-button {
+  background-color: var(--btn-danger-bg);
+}
+
+/* ========== SETTINGS AND REPORTS ========== */
+.dark-theme .settings-tabs button {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.dark-theme .settings-tabs button.active {
+  background-color: var(--btn-primary-bg);
+  color: white;
+}
+
+.dark-theme .settings-content {
+  background-color: var(--bg-secondary);
+}
+
+.dark-theme .settings .settings-content {
+  background-color: var(--bg-secondary);
+}
+
+.dark-theme .backup-configuration,
+.dark-theme .backup-status,
+.dark-theme .user-settings,
+.dark-theme .general-settings {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.dark-theme .settings-tabs {
+  border-bottom-color: var(--border-color);
+}
+
+/* ========== MODALS ========== */
+.dark-theme .modal {
+  background-color: var(--bg-secondary);
+}
+
+.dark-theme .modal-header {
+  background-color: var(--bg-tertiary);
+}
+
+.dark-theme .modal-footer {
+  background-color: var(--bg-tertiary);
+  border-top-color: var(--border-color);
+}
+
+/* ========== LOGIN FORM ========== */
+.dark-theme .login-container {
+  background-color: var(--bg-primary);
+  background-image: linear-gradient(
+    to bottom right,
+    var(--bg-primary),
+    var(--bg-secondary)
+  );
+}
+
+.dark-theme .login-form-wrapper {
+  background-color: var(--bg-secondary);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .login-header h2 {
+  color: var(--text-primary);
+}
+
+.dark-theme .login-tab {
+  color: var(--text-secondary);
+}
+
+.dark-theme .login-tab.active {
+  color: var(--btn-primary-bg);
+}
+
+.dark-theme .login-tab.active::after {
+  background-color: var(--btn-primary-bg);
+}
+
+/* ========== SEARCH AND FILTERS ========== */
+.dark-theme .search-input {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.dark-theme .filter-group label {
+  color: var(--text-secondary);
+}
+
+.dark-theme .no-results {
+  color: var(--text-tertiary);
+}
+
+/* ========== TYPOGRAPHY ========== */
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4,
+.dark-theme h5,
+.dark-theme h6 {
+  color: var(--text-primary);
+}
+
+.dark-theme p {
+  color: var(--text-primary);
+}
+
+.dark-theme .student-profile .detail-item span {
+  color: var(--text-primary);
+}
+
+.dark-theme .enrollment-form {
+  color: var(--text-primary);
+}
+
+/* ========== STUDENT DASHBOARD ========== */
+/* Fix for the Students by Section header */
+.dark-theme .students-by-section-header {
+  color: var(--text-primary);
+}
+
+/* Fix for section cards in the dashboard */
+.dark-theme .section-card .section-header {
+  color: #333; /* Dark text on light background */
+}
+
+.dark-theme .section-card .section-count {
+  color: #333; /* Dark text on light background */
+}
+
+/* Additional fix for section labels */
+.dark-theme .section-label {
+  color: var(--text-primary);
+}
+
+/* ========== UTILITY COMPONENTS ========== */
+.dark-theme .loading-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.dark-theme .loading-text {
+  color: var(--btn-primary-bg);
+}
+
+.dark-theme .loader {
+  border-color: rgba(255, 255, 255, 0.1);
+  border-top-color: var(--btn-primary-bg);
+}

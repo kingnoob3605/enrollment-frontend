@@ -1,0 +1,614 @@
+/* Table styles */
+.students-table,
+.teachers-table,
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table th,
+.students-table td,
+.teachers-table th,
+.teachers-table td,
+.users-table th,
+.users-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.students-table th,
+.teachers-table th,
+.users-table th {
+  font-weight: 600;
+  background-color: #f9f9f9;
+}
+
+.students-table tr:hover,
+.teachers-table tr:hover,
+.users-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+}
+
+/* Filters and search */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.filter-group select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Student list container */
+.student-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Student profile */
+.student-profile {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-sections {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.profile-section h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-item {
+  display: flex;
+}
+
+.detail-item label {
+  width: 150px;
+  font-weight: 600;
+  color: #7f8c8d;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Reports tables */
+.enrollment-tables,
+.health-tables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.grade-enrollment,
+.section-enrollment,
+.bmi-stats,
+.vision-stats,
+.hearing-stats,
+.vaccination-stats {
+  flex: 1;
+  min-width: 300px;
+}
+
+.grade-enrollment h4,
+.section-enrollment h4,
+.bmi-stats h4,
+.vision-stats h4,
+.hearing-stats h4,
+.vaccination-stats h4 {
+  margin-bottom: 1rem;
+  color: #7f8c8d;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  flex: 1;
+  text-align: center;
+}
+
+.stat-box h4 {
+  margin-bottom: 0.5rem;
+  color: #7f8c8d;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* Print styles for tables */
+@media print {
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  table th,
+  table td {
+    border: 1px solid #ddd !important;
+  }
+}
+
+/* Reports tables */
+.enrollment-tables,
+.health-tables,
+.attendance-tables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.grade-enrollment,
+.section-enrollment,
+.enrollment-status,
+.age-distribution,
+.nutritional-stats,
+.height-stats,
+.vision-stats,
+.hearing-stats,
+.vaccination-stats,
+.dental-stats,
+.section-attendance,
+.absence-reasons,
+.monthly-trends,
+.tardiness-report {
+  flex: 1;
+  min-width: 300px;
+  margin-bottom: 2rem;
+}
+
+.grade-enrollment h4,
+.section-enrollment h4,
+.enrollment-status h4,
+.age-distribution h4,
+.nutritional-stats h4,
+.height-stats h4,
+.vision-stats h4,
+.hearing-stats h4,
+.vaccination-stats h4,
+.dental-stats h4,
+.section-attendance h4,
+.absence-reasons h4,
+.monthly-trends h4,
+.tardiness-report h4 {
+  margin-bottom: 1rem;
+  color: var(--text-secondary, #7f8c8d);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Table styles */
+.students-table,
+.teachers-table,
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table th,
+.students-table td,
+.teachers-table th,
+.teachers-table td,
+.users-table th,
+.users-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.students-table th,
+.teachers-table th,
+.users-table th {
+  font-weight: 600;
+  background-color: #f9f9f9;
+}
+
+.students-table tr:hover,
+.teachers-table tr:hover,
+.users-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #7f8c8d;
+}
+
+/* Filters and search */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.filter-group select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Student list container */
+.student-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Student profile */
+.student-profile {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-sections {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.profile-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.profile-section h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-item {
+  display: flex;
+}
+
+.detail-item label {
+  width: 150px;
+  font-weight: 600;
+  color: #7f8c8d;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Reports styles - updated for row-column layout */
+.report-content {
+  margin-top: 1.5rem;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background-color: var(--bg-secondary, white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  flex: 1;
+  text-align: center;
+  box-shadow: var(--box-shadow, 0 2px 5px rgba(0, 0, 0, 0.1));
+}
+
+.stat-box h4 {
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary, #7f8c8d);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary, #2c3e50);
+}
+
+/* New report row-column structure */
+.report-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.report-table-container {
+  flex: 1;
+  min-width: 300px;
+  margin-bottom: 2rem;
+  background-color: var(--bg-secondary, white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow, 0 2px 5px rgba(0, 0, 0, 0.1));
+}
+
+.report-table-container h4 {
+  margin-bottom: 1rem;
+  color: var(--text-secondary, #7f8c8d);
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color, #eee);
+  padding-bottom: 0.5rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.report-table th {
+  background-color: var(--table-header-bg, #f9f9f9);
+  color: var(--text-primary, #333);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.report-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.report-table tr:hover {
+  background-color: var(--table-row-hover, #f5f5f5);
+}
+
+.report-date {
+  color: var(--text-secondary, #7f8c8d);
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Report controls */
+.report-controls {
+  background-color: var(--bg-secondary, white);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--box-shadow, 0 2px 5px rgba(0, 0, 0, 0.1));
+}
+
+.control-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.control-row:last-child {
+  margin-bottom: 0;
+}
+
+.report-type-selector {
+  flex: 1;
+  min-width: 200px;
+}
+
+.report-actions.inline {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0;
+}
+
+.generate-button,
+.export-button,
+.print-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.generate-button {
+  background-color: var(--accent-color, #2980b9);
+  color: white;
+}
+
+.generate-button:hover {
+  background-color: var(--accent-hover, #3498db);
+}
+
+.export-button {
+  background-color: var(--success-color, #27ae60);
+  color: white;
+}
+
+.export-button:hover {
+  background-color: #2ecc71;
+}
+
+.print-button {
+  background-color: var(--info-color, #3498db);
+  color: white;
+}
+
+.print-button:hover {
+  background-color: #2980b9;
+}
+
+button:disabled {
+  background-color: #95a5a6 !important;
+  cursor: not-allowed;
+}
+
+/* Loading state */
+.loading-report {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.no-report-message {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary, #7f8c8d);
+}
+
+/* Print styles - hide controls when printing */
+@media print {
+  .print-hide,
+  .report-controls,
+  .report-actions {
+    display: none !important;
+  }
+
+  .report-content {
+    margin-top: 0;
+  }
+
+  .report-table-container,
+  .stat-box {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .report-row {
+    display: block;
+  }
+
+  .report-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .report-table th,
+  .report-table td {
+    border: 1px solid #ddd !important;
+  }
+}

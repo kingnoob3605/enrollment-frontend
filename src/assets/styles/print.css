@@ -1,0 +1,119 @@
+/* Print styles for student profiles */
+@media print {
+  body {
+    font-family: "Arial", sans-serif;
+    color: #000;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+  }
+
+  .print-container {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .print-header {
+    text-align: center;
+    border-bottom: 2px solid #2c3e50;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+
+  .print-header h1 {
+    font-size: 22pt;
+    color: #2c3e50;
+    margin-bottom: 5px;
+  }
+
+  .print-header p {
+    font-size: 11pt;
+    color: #7f8c8d;
+    margin: 5px 0;
+  }
+
+  .print-logo {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .print-logo img {
+    height: 80px;
+  }
+
+  .school-name {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .print-section {
+    margin-bottom: 25px;
+    page-break-inside: avoid;
+  }
+
+  .print-section h3 {
+    font-size: 14pt;
+    color: #2c3e50;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+
+  .print-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .print-detail-item {
+    margin-bottom: 8px;
+    display: flex;
+  }
+
+  .print-detail-item label {
+    width: 150px;
+    font-weight: bold;
+    color: #34495e;
+  }
+
+  .print-detail-item span {
+    flex: 1;
+  }
+
+  .print-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 10pt;
+    color: #7f8c8d;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+  }
+
+  .print-signatures {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+  }
+
+  .signature-line {
+    width: 200px;
+    border-top: 1px solid #000;
+    margin-top: 50px;
+    text-align: center;
+    padding-top: 5px;
+  }
+
+  /* Hide buttons when printing */
+  button {
+    display: none !important;
+  }
+
+  /* Full-width for health info on smaller paper sizes */
+  @media (max-width: 8.5in) {
+    .print-details {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -1,0 +1,824 @@
+/* Form styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+}
+
+.form-control {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group input[type="password"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.form-group input[disabled],
+.form-group select[disabled],
+.form-group textarea[disabled] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Form validation styles */
+.form-group.has-error label {
+  color: #e74c3c;
+}
+
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea {
+  border-color: #e74c3c;
+}
+
+.error-feedback {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Checkbox styling */
+.checkbox-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+}
+
+/* Button styles */
+.submit-button {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.submit-button:hover {
+  background-color: #2ecc71;
+}
+
+.cancel-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cancel-button:hover {
+  background-color: #c0392b;
+}
+
+.save-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.save-button:hover {
+  background-color: #2980b9;
+}
+
+.add-button {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.add-button:hover {
+  background-color: #2ecc71;
+}
+
+.edit-button {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-button:hover {
+  background-color: #e67e22;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.view-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.view-button:hover {
+  background-color: #2980b9;
+}
+
+.print-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.print-button:hover {
+  background-color: #2980b9;
+}
+
+.close-button {
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.close-button:hover {
+  background-color: #95a5a6;
+}
+
+/* Enrollment form specific */
+.enrollment-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-sections {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.form-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.form-section h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+/* Export button styling - consolidated from export.css */
+.export-button {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem; /* Matches the add-button padding */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.export-button:hover {
+  background-color: #2ecc71;
+}
+
+.export-button:active {
+  transform: translateY(1px);
+}
+
+.export-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* Export options panel */
+.export-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* SF form preview styling */
+.sf-form-preview {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+}
+
+.sf-form-preview h4 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.sf-form-preview p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Loading indicator for export process */
+.export-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark theme support for export elements */
+.dark-theme .export-button {
+  background-color: var(--btn-success-bg);
+}
+
+.dark-theme .export-button:hover {
+  background-color: #2ecc71;
+}
+
+.dark-theme .sf-form-preview {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+.dark-theme .sf-form-preview h4 {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-color);
+}
+
+.dark-theme .sf-form-preview p {
+  color: var(--text-secondary);
+}
+.action-btn {
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-left: 0.5rem;
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+/* Add button - green */
+.add-button {
+  background-color: #27ae60;
+}
+
+.add-button:hover {
+  background-color: #2ecc71;
+}
+
+/* View button - blue */
+.view-button {
+  background-color: #3498db;
+}
+
+.view-button:hover {
+  background-color: #2980b9;
+}
+
+/* Export button - purple */
+.export-button {
+  background-color: #9b59b6;
+}
+
+.export-button:hover {
+  background-color: #8e44ad;
+}
+.action-btn {
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-left: 0.5rem;
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+/* Add button - green */
+.add-button {
+  background-color: #27ae60;
+}
+
+.add-button:hover {
+  background-color: #2ecc71;
+}
+
+/* View button - blue */
+.view-button {
+  background-color: #3498db;
+}
+
+.view-button:hover {
+  background-color: #2980b9;
+}
+
+/* Export button - purple */
+.export-button {
+  background-color: #9b59b6;
+}
+
+.export-button:hover {
+  background-color: #8e44ad;
+}
+
+/* Form styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+}
+
+.form-control {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group input[type="password"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.form-group input[disabled],
+.form-group select[disabled],
+.form-group textarea[disabled] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Form validation styles */
+.form-group.has-error label {
+  color: #e74c3c;
+}
+
+.form-group.has-error input,
+.form-group.has-error select,
+.form-group.has-error textarea {
+  border-color: #e74c3c;
+}
+
+.error-feedback {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Checkbox styling */
+.checkbox-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+}
+
+/* Common button styles - shared properties for all action buttons */
+.action-btn {
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-left: 0.5rem;
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+/* Button styles */
+.submit-button {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.submit-button:hover {
+  background-color: #2ecc71;
+}
+
+.cancel-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cancel-button:hover {
+  background-color: #c0392b;
+}
+
+.save-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.save-button:hover {
+  background-color: #2980b9;
+}
+
+/* Add button - green */
+.add-button {
+  background-color: #27ae60;
+}
+
+.add-button:hover {
+  background-color: #2ecc71;
+}
+
+/* View button - blue */
+.view-button {
+  background-color: #3498db;
+}
+
+.view-button:hover {
+  background-color: #2980b9;
+}
+
+/* Export button - purple */
+.export-button {
+  background-color: #9b59b6;
+}
+
+.export-button:hover {
+  background-color: #8e44ad;
+}
+
+.edit-button {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-button:hover {
+  background-color: #e67e22;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
+}
+
+.print-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.print-button:hover {
+  background-color: #2980b9;
+}
+
+.close-button {
+  background-color: #7f8c8d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.close-button:hover {
+  background-color: #95a5a6;
+}
+
+/* Enrollment form specific */
+.enrollment-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-sections {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.form-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.form-section h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+/* Export options panel */
+.export-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* SF form preview styling */
+.sf-form-preview {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+}
+
+.sf-form-preview h4 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.sf-form-preview p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Loading indicator for export process */
+.export-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark theme support for export elements */
+.dark-theme .export-button {
+  background-color: #9b59b6;
+}
+
+.dark-theme .export-button:hover {
+  background-color: #8e44ad;
+}
+
+.dark-theme .add-button {
+  background-color: var(--btn-success-bg, #27ae60);
+}
+
+.dark-theme .add-button:hover {
+  background-color: #2ecc71;
+}
+
+.dark-theme .view-button {
+  background-color: var(--btn-primary-bg, #3498db);
+}
+
+.dark-theme .view-button:hover {
+  background-color: #2980b9;
+}
+
+.dark-theme .sf-form-preview {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-color);
+}
+
+.dark-theme .sf-form-preview h4 {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-color);
+}
+
+.dark-theme .sf-form-preview p {
+  color: var(--text-secondary);
+}

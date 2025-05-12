@@ -1,0 +1,189 @@
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-box {
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .profile-sections,
+  .form-sections {
+    flex-direction: column;
+  }
+
+  .summary-stats,
+  .enrollment-tables,
+  .health-tables {
+    flex-direction: column;
+  }
+
+  .header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .logo h1 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .user-info {
+    margin-top: 0.5rem;
+  }
+
+  .login-form-wrapper {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .forgot-password {
+    margin-left: auto;
+  }
+
+  .settings-tabs {
+    flex-wrap: wrap;
+  }
+
+  .settings-tabs button {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .login-tabs {
+    margin-bottom: 1rem;
+  }
+
+  .login-tab {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .panel-header h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .panel-header button {
+    width: 100%;
+  }
+
+  .students-table,
+  .teachers-table,
+  .users-table {
+    font-size: 0.8rem;
+  }
+
+  .students-table th,
+  .students-table td,
+  .teachers-table th,
+  .teachers-table td,
+  .users-table th,
+  .users-table td {
+    padding: 0.5rem;
+  }
+
+  /* Hide less important columns on mobile */
+  .students-table th:nth-child(5),
+  .students-table td:nth-child(5),
+  .teachers-table th:nth-child(4),
+  .teachers-table td:nth-child(4) {
+    display: none;
+  }
+
+  .view-button,
+  .edit-button,
+  .delete-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: white;
+    font-size: 12pt;
+  }
+
+  .header,
+  .footer,
+  .sidebar,
+  .form-actions,
+  .panel-header button,
+  .report-controls,
+  .report-actions {
+    display: none !important;
+  }
+
+  .content {
+    box-shadow: none !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .dashboard {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .student-profile,
+  .enrollment-report,
+  .health-report {
+    break-inside: avoid;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: black !important;
+  }
+}
