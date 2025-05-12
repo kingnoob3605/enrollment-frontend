@@ -4,36 +4,152 @@ import TeacherManagement from "./TeacherManagement";
 import StudentManagement from "../student/StudentManagement";
 import Reports from "./Reports";
 import Settings from "./Settings";
+import {
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState("students");
+  const [activeTab, setActiveTab] = useState("home");
   const { darkMode } = useContext(ThemeContext);
-  const [totalStudents, setTotalStudents] = useState(50);
-  const [sectionData, setSectionData] = useState([
-    { id: "A", name: "Section A", count: 10 },
-    { id: "B", name: "Section B", count: 12 },
-    { id: "C", name: "Section C", count: 9 },
-    { id: "D", name: "Section D", count: 11 },
-    { id: "E", name: "Section E", count: 8 },
-  ]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSection, setSelectedSection] = useState("All Sections");
   const [selectedTeacher, setSelectedTeacher] = useState("All Teachers");
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [showCharts, setShowCharts] = useState(true);
 
-  // Mock student data
+  // Colors for charts
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884d8",
+    "#82ca9d",
+  ];
+
+  // Define Grade 1 sections
+  const grade1Sections = ["A", "B", "C", "D", "E"];
+
+  // Generate section data with random student counts (40-49 per section)
+  const [sectionData, setSectionData] = useState(() => {
+    return grade1Sections.map((section) => ({
+      id: section,
+      name: `Section ${section}`,
+      count: Math.floor(Math.random() * 10) + 40,
+    }));
+  });
+
+  // Mock student data - just a few examples for the dashboard table
   const [students, setStudents] = useState([
     {
+      id: 1,
       lrn: "736600902864",
       name: "Antonio Bautista",
-      section: "1-B",
+      section: "B",
       teacher: "Teacher B",
       date: "07/29/24",
       status: "Enrolled",
+      gender: "Male",
     },
-    // Additional student data would be here
+    {
+      id: 2,
+      lrn: "736600902865",
+      name: "Maria Santos",
+      section: "A",
+      teacher: "Teacher A",
+      date: "07/30/24",
+      status: "Enrolled",
+      gender: "Female",
+    },
+    {
+      id: 3,
+      lrn: "736600902866",
+      name: "Juan Cruz",
+      section: "C",
+      teacher: "Teacher C",
+      date: "07/28/24",
+      status: "Enrolled",
+      gender: "Male",
+    },
+    {
+      id: 4,
+      lrn: "736600902867",
+      name: "Sofia Garcia",
+      section: "D",
+      teacher: "Teacher D",
+      date: "07/31/24",
+      status: "Enrolled",
+      gender: "Female",
+    },
+    {
+      id: 5,
+      lrn: "736600902868",
+      name: "Rafael Lim",
+      section: "E",
+      teacher: "Teacher E",
+      date: "07/29/24",
+      status: "Enrolled",
+      gender: "Male",
+    },
   ]);
+
+  // Calculate total students across all sections
+  const totalStudents = sectionData.reduce(
+    (sum, section) => sum + section.count,
+    0
+  );
+
+  // Calculate gender distribution (approximately 52% male, 48% female)
+  const maleCount = Math.round(totalStudents * 0.52);
+  const femaleCount = totalStudents - maleCount;
+
+  // Prepare chart data
+  const [enrollmentData, setEnrollmentData] = useState([]);
+  const [genderData, setGenderData] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
+
+  useEffect(() => {
+    // Generate enrollment data for charts
+    setEnrollmentData(
+      sectionData.map((section) => ({
+        name: section.name,
+        students: section.count,
+      }))
+    );
+
+    // Generate gender data for pie chart
+    setGenderData([
+      { name: "Male", value: maleCount },
+      { name: "Female", value: femaleCount },
+    ]);
+
+    // Generate attendance data for the past 7 days
+    const sevenDaysData = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const day = date.toLocaleDateString("en-US", { weekday: "short" });
+
+      // Generate a random attendance percentage between 90-98%
+      const rate = Math.floor(Math.random() * 8) + 90;
+
+      sevenDaysData.push({
+        day: day,
+        rate: rate,
+      });
+    }
+    setAttendanceData(sevenDaysData);
+  }, [sectionData]);
 
   // Ensure data is preserved across component remounts using localStorage
   useEffect(() => {
@@ -41,18 +157,12 @@ const AdminDashboard = () => {
     if (savedSectionData) {
       setSectionData(JSON.parse(savedSectionData));
     }
-
-    const savedTotalStudents = localStorage.getItem("totalStudents");
-    if (savedTotalStudents) {
-      setTotalStudents(parseInt(savedTotalStudents));
-    }
   }, []);
 
   // Save data when it changes
   useEffect(() => {
     localStorage.setItem("sectionData", JSON.stringify(sectionData));
-    localStorage.setItem("totalStudents", totalStudents.toString());
-  }, [sectionData, totalStudents]);
+  }, [sectionData]);
 
   // Filter students based on search and filters
   const filteredStudents = students.filter((student) => {
@@ -61,7 +171,7 @@ const AdminDashboard = () => {
       student.lrn.includes(searchTerm);
     const matchesSection =
       selectedSection === "All Sections" ||
-      student.section.includes(selectedSection);
+      student.section === selectedSection.replace("Section ", "");
     const matchesTeacher =
       selectedTeacher === "All Teachers" || student.teacher === selectedTeacher;
     const matchesStatus =
@@ -111,29 +221,146 @@ const AdminDashboard = () => {
       <div className="content">
         {activeTab === "home" && (
           <div className="admin-dashboard-home">
-            <div className="dashboard-summary">
-              <div className="summary-card">
-                <h3>Total Grade 1 Students</h3>
-                <p className="stat-value">{totalStudents}</p>
+            <div className="panel-header">
+              <h2>Grade 1 Overview Dashboard</h2>
+              <div className="panel-actions">
+                <button
+                  className="action-btn view-button"
+                  onClick={() => setShowCharts(!showCharts)}
+                >
+                  {showCharts ? "Hide Charts" : "Show Charts"}
+                </button>
               </div>
             </div>
 
-            <div className="students-by-section">
-              <h3 className="students-by-section-header">
-                Students by Section
-              </h3>
+            <div className="student-summary-cards">
+              <div className="summary-card-item">
+                <div className="summary-icon male-icon"></div>
+                <div className="summary-details">
+                  <h3>Male Students</h3>
+                  <p className="summary-value">{maleCount}</p>
+                </div>
+              </div>
+
+              <div className="summary-card-item">
+                <div className="summary-icon female-icon"></div>
+                <div className="summary-details">
+                  <h3>Female Students</h3>
+                  <p className="summary-value">{femaleCount}</p>
+                </div>
+              </div>
+
+              <div className="summary-card-item">
+                <div className="summary-icon total-icon"></div>
+                <div className="summary-details">
+                  <h3>Total Students</h3>
+                  <p className="summary-value">{totalStudents}</p>
+                </div>
+              </div>
+
+              <div className="summary-card-item">
+                <div className="summary-icon enrolled-icon">📝</div>
+                <div className="summary-details">
+                  <h3>Enrolled</h3>
+                  <p className="summary-value">{totalStudents}</p>
+                </div>
+              </div>
+            </div>
+
+            {showCharts && (
+              <div className="analytics-dashboard">
+                <div className="dashboard-title">
+                  <h3>Student Distribution Analysis</h3>
+                </div>
+
+                <div className="charts-row">
+                  <div className="chart-container">
+                    <h4>Enrollment by Section</h4>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={enrollmentData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis domain={[0, 50]} />
+                        <Tooltip />
+                        <Legend />
+                        <Bar
+                          dataKey="students"
+                          fill="#8884d8"
+                          name="Students"
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="chart-container">
+                    <h4>Gender Distribution</h4>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <PieChart>
+                        <Pie
+                          data={genderData}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={true}
+                          outerRadius={80}
+                          fill="#8884d8"
+                          dataKey="value"
+                          label={({ name, percent }) =>
+                            `${name}: ${(percent * 100).toFixed(0)}%`
+                          }
+                        >
+                          {genderData.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value) => [value, "Students"]} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="chart-container full-width">
+                  <h4>Weekly Attendance Trend</h4>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={attendanceData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="day" />
+                      <YAxis domain={[85, 100]} />
+                      <Tooltip />
+                      <Legend />
+                      <Bar
+                        dataKey="rate"
+                        fill="#82ca9d"
+                        name="Attendance Rate %"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
+
+            <div className="section-summary">
+              <div className="students-list-header">
+                <h3>Grade 1 Sections</h3>
+              </div>
               <div className="section-grid">
                 {sectionData.map((section) => (
                   <div
                     key={section.id}
                     className="section-card"
+                    onClick={() => setSelectedSection(`Section ${section.id}`)}
                     style={{
                       backgroundColor: "#fff",
-                      padding: "1rem",
+                      padding: "1.5rem",
                       borderRadius: "8px",
-                      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                       textAlign: "center",
                       color: darkMode ? "#333" : "#333",
+                      transition: "transform 0.3s, box-shadow 0.3s",
+                      cursor: "pointer",
                     }}
                   >
                     <h4
@@ -141,6 +368,7 @@ const AdminDashboard = () => {
                       style={{
                         margin: "0 0 0.5rem 0",
                         color: darkMode ? "#333" : "#333",
+                        fontSize: "1.2rem",
                       }}
                     >
                       Section {section.id}
@@ -148,7 +376,7 @@ const AdminDashboard = () => {
                     <p
                       className="section-count"
                       style={{
-                        fontSize: "1.75rem",
+                        fontSize: "2rem",
                         fontWeight: "bold",
                         margin: 0,
                         color: darkMode ? "#333" : "#333",
@@ -156,65 +384,29 @@ const AdminDashboard = () => {
                     >
                       {section.count}
                     </p>
+                    <p
+                      className="section-teacher"
+                      style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}
+                    >
+                      Teacher {section.id}
+                    </p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="student-search">
-              <input
-                type="text"
-                placeholder="Search by name or LRN..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-
-              <div className="filter-controls">
-                <div className="filter-group">
-                  <label>Section:</label>
-                  <select
-                    value={selectedSection}
-                    onChange={(e) => setSelectedSection(e.target.value)}
+            <div className="student-list">
+              <div className="students-list-header">
+                <h3>Recent Enrollments</h3>
+                <div className="view-all-link">
+                  <button
+                    className="text-button"
+                    onClick={() => setActiveTab("students")}
                   >
-                    <option value="All Sections">All Sections</option>
-                    <option value="1-A">1-A</option>
-                    <option value="1-B">1-B</option>
-                    <option value="1-C">1-C</option>
-                    <option value="1-D">1-D</option>
-                    <option value="1-E">1-E</option>
-                  </select>
-                </div>
-
-                <div className="filter-group">
-                  <label>Teacher:</label>
-                  <select
-                    value={selectedTeacher}
-                    onChange={(e) => setSelectedTeacher(e.target.value)}
-                  >
-                    <option value="All Teachers">All Teachers</option>
-                    <option value="Teacher A">Teacher A</option>
-                    <option value="Teacher B">Teacher B</option>
-                    <option value="Teacher C">Teacher C</option>
-                  </select>
-                </div>
-
-                <div className="filter-group">
-                  <label>Status:</label>
-                  <select
-                    value={selectedStatus}
-                    onChange={(e) => setSelectedStatus(e.target.value)}
-                  >
-                    <option value="All">All</option>
-                    <option value="Enrolled">Enrolled</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Transferred">Transferred</option>
-                  </select>
+                    View All Students →
+                  </button>
                 </div>
               </div>
-            </div>
-
-            <div className="student-list">
               <table className="students-table">
                 <thead>
                   <tr>
@@ -228,8 +420,8 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredStudents.map((student) => (
-                    <tr key={student.lrn}>
+                  {students.map((student) => (
+                    <tr key={student.id}>
                       <td>{student.lrn}</td>
                       <td>{student.name}</td>
                       <td>{student.section}</td>
@@ -237,7 +429,15 @@ const AdminDashboard = () => {
                       <td>{student.date}</td>
                       <td>{student.status}</td>
                       <td>
-                        <button className="view-button">View Profile</button>
+                        <button
+                          className="view-button"
+                          onClick={() => {
+                            setActiveTab("students");
+                            // In a real app, you would set the selected student here
+                          }}
+                        >
+                          View Profile
+                        </button>
                       </td>
                     </tr>
                   ))}

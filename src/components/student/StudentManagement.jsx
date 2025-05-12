@@ -462,6 +462,76 @@ const StudentManagement = ({ userType, teacherSection }) => {
                   </div>
                 </div>
 
+                <div className="student-summary-cards">
+                  <div className="summary-card-item">
+                    <div className="summary-icon male-icon"></div>
+                    <div className="summary-details">
+                      <h3>Male Students</h3>
+                      <p className="summary-value">
+                        {userType === "teacher" && assignedSection
+                          ? students.filter(
+                              (s) =>
+                                s.section === assignedSection &&
+                                s.gender === "Male"
+                            ).length
+                          : students.filter((s) => s.gender === "Male").length}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="summary-card-item">
+                    <div className="summary-icon female-icon"></div>
+                    <div className="summary-details">
+                      <h3>Female Students</h3>
+                      <p className="summary-value">
+                        {userType === "teacher" && assignedSection
+                          ? students.filter(
+                              (s) =>
+                                s.section === assignedSection &&
+                                s.gender === "Female"
+                            ).length
+                          : students.filter((s) => s.gender === "Female")
+                              .length}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="summary-card-item">
+                    <div className="summary-icon total-icon"></div>
+                    <div className="summary-details">
+                      <h3>Total Students</h3>
+                      <p className="summary-value">{totalStudents}</p>
+                    </div>
+                  </div>
+
+                  <div className="summary-card-item">
+                    <div className="summary-icon enrolled-icon"></div>
+                    <div className="summary-details">
+                      <h3>Enrolled</h3>
+                      <p className="summary-value">
+                        {userType === "teacher" && assignedSection
+                          ? students.filter(
+                              (s) =>
+                                s.section === assignedSection &&
+                                s.status === "Enrolled"
+                            ).length
+                          : students.filter((s) => s.status === "Enrolled")
+                              .length}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="students-list-header">
+                  <h3>
+                    Student List{" "}
+                    {filterSection ? `- Section ${filterSection}` : ""}
+                  </h3>
+                  <div className="list-info">
+                    <span>{filteredStudents.length} students found</span>
+                  </div>
+                </div>
+
                 <table className="students-table">
                   <thead>
                     <tr>
