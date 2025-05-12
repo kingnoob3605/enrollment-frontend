@@ -1,12 +1,21 @@
-// src/components/teacher/EnrollmentForm.jsx - Mock form for adding students
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const EnrollmentForm = ({
   onClose,
   onSave,
   defaultGrade = "1",
   sections = ["A", "B", "C", "D", "E"],
+  teacherSection,
 }) => {
+  const { currentUser } = useContext(AuthContext);
+
+  // Use teacherSection if provided, otherwise try to get from currentUser
+  const assignedSection = teacherSection || currentUser?.section;
+
+  // If teacher has an assigned section, only show that section in the dropdown
+  const availableSections = assignedSection ? [assignedSection] : sections;
+
   const [formData, setFormData] = useState({
     // SF1 Data
     lrn: "",
@@ -15,7 +24,7 @@ const EnrollmentForm = ({
     lastName: "",
     suffix: "",
     grade: defaultGrade,
-    section: sections[0],
+    section: availableSections[0],
     birthdate: "",
     gender: "Male",
     address: "",
@@ -68,6 +77,9 @@ const EnrollmentForm = ({
       formData.middleName ? formData.middleName + " " : ""
     }${formData.lastName}${formData.suffix ? " " + formData.suffix : ""}`;
 
+    // Create teacher assignment based on section
+    const teacherAssigned = `Teacher ${formData.section}`;
+
     // Create student object to save
     const studentData = {
       name: fullName,
@@ -80,6 +92,9 @@ const EnrollmentForm = ({
       parent_name: formData.parentName,
       parent_contact: formData.parentContact,
       parent_email: formData.parentEmail,
+      status: "Enrolled",
+      date_enrolled: new Date().toISOString().split("T")[0],
+      teacher_assigned: teacherAssigned,
       health: {
         height: parseFloat(formData.height),
         weight: parseFloat(formData.weight),
@@ -106,7 +121,11 @@ const EnrollmentForm = ({
   return (
     <div className="enrollment-form">
       <div className="form-header">
-        <h2>Grade 1 Student Enrollment Form</h2>
+        <h2>
+          {assignedSection
+            ? `Grade 1 Section ${assignedSection} Student Enrollment Form`
+            : "Grade 1 Student Enrollment Form"}
+        </h2>
         {onClose && (
           <button onClick={onClose} className="close-button">
             Close
@@ -194,18 +213,36 @@ const EnrollmentForm = ({
 
               <div className="form-group">
                 <label>Section*:</label>
-                <select
-                  name="section"
-                  value={formData.section}
-                  onChange={handleChange}
-                  required
-                >
-                  {sections.map((section) => (
-                    <option key={section} value={section}>
-                      Section {section}
-                    </option>
-                  ))}
-                </select>
+                {availableSections.length === 1 ? (
+                  // If teacher has only one section, show it as disabled input
+                  <>
+                    <input
+                      type="text"
+                      value={`Section ${availableSections[0]}`}
+                      disabled
+                      className="form-control"
+                    />
+                    <input
+                      type="hidden"
+                      name="section"
+                      value={availableSections[0]}
+                    />
+                  </>
+                ) : (
+                  // Otherwise show a dropdown for admin
+                  <select
+                    name="section"
+                    value={formData.section}
+                    onChange={handleChange}
+                    required
+                  >
+                    {availableSections.map((section) => (
+                      <option key={section} value={section}>
+                        Section {section}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 

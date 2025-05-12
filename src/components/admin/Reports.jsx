@@ -1,4 +1,19 @@
 import React, { useState, useEffect } from "react";
+import {
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const Reports = () => {
   const [reportType, setReportType] = useState("enrollment");
@@ -11,6 +26,10 @@ const Reports = () => {
 
   const [reportGenerated, setReportGenerated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showCharts, setShowCharts] = useState(true);
+
+  // Define sections
+  const allSections = ["A", "B", "C", "D", "E"];
 
   // Mock teacher data
   const [teachers, setTeachers] = useState([
@@ -18,7 +37,7 @@ const Reports = () => {
       id: 1,
       name: "Maria Santos",
       section: "A",
-      students: 10,
+      students: Math.floor(Math.random() * 10) + 40, // 40-49 students
       attendance: 95,
       performance: 88,
     },
@@ -26,7 +45,7 @@ const Reports = () => {
       id: 2,
       name: "Juan Dela Cruz",
       section: "B",
-      students: 12,
+      students: Math.floor(Math.random() * 10) + 40,
       attendance: 92,
       performance: 90,
     },
@@ -34,7 +53,7 @@ const Reports = () => {
       id: 3,
       name: "Ana Reyes",
       section: "C",
-      students: 9,
+      students: Math.floor(Math.random() * 10) + 40,
       attendance: 96,
       performance: 85,
     },
@@ -42,7 +61,7 @@ const Reports = () => {
       id: 4,
       name: "Pedro Lim",
       section: "D",
-      students: 11,
+      students: Math.floor(Math.random() * 10) + 40,
       attendance: 94,
       performance: 92,
     },
@@ -50,136 +69,166 @@ const Reports = () => {
       id: 5,
       name: "Sofia Garcia",
       section: "E",
-      students: 8,
+      students: Math.floor(Math.random() * 10) + 40,
       attendance: 97,
       performance: 91,
     },
   ]);
+
+  // Mock data for charts
+  const [enrollmentData, setEnrollmentData] = useState([]);
+  const [genderData, setGenderData] = useState([]);
+  const [nutritionalStatusData, setNutritionalStatusData] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
+
+  // Colors for charts
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884d8",
+    "#82ca9d",
+  ];
 
   useEffect(() => {
     const savedTeachers = localStorage.getItem("teacherData");
     if (savedTeachers) {
       setTeachers(JSON.parse(savedTeachers));
     }
+
+    // Generate initial chart data
+    generateChartData();
   }, []);
 
   useEffect(() => {
     localStorage.setItem("teacherData", JSON.stringify(teachers));
   }, [teachers]);
 
+  // Generate chart data based on filters
+  const generateChartData = () => {
+    // Enrollment by section data
+    const sectionEnrollmentData = teachers.map((teacher) => ({
+      name: `Section ${teacher.section}`,
+      students: teacher.students,
+    }));
+    setEnrollmentData(sectionEnrollmentData);
+
+    // Gender distribution data (random distribution, but consistent)
+    const totalStudents = teachers.reduce(
+      (sum, teacher) => sum + teacher.students,
+      0
+    );
+    const maleCount = Math.round(totalStudents * 0.52); // 52% male
+    const femaleCount = totalStudents - maleCount;
+
+    setGenderData([
+      { name: "Male", value: maleCount },
+      { name: "Female", value: femaleCount },
+    ]);
+
+    // Nutritional status data (random but realistic distribution)
+    setNutritionalStatusData([
+      { name: "Normal", value: Math.round(totalStudents * 0.6) }, // 60%
+      { name: "Underweight", value: Math.round(totalStudents * 0.14) }, // 14%
+      { name: "Overweight", value: Math.round(totalStudents * 0.12) }, // 12%
+      { name: "Severely Underweight", value: Math.round(totalStudents * 0.06) }, // 6%
+      { name: "Obese", value: Math.round(totalStudents * 0.08) }, // 8%
+    ]);
+
+    // Attendance data for past 30 days (random but trending upward)
+    const thirtyDaysData = [];
+    let baseAttendance = 91;
+    for (let i = 0; i < 30; i++) {
+      // Slightly increase base attendance over time with some randomness
+      baseAttendance = Math.min(
+        98,
+        baseAttendance + (Math.random() * 0.4 - 0.1)
+      );
+      thirtyDaysData.push({
+        day: i + 1,
+        attendance: Math.round(baseAttendance * 10) / 10, // Round to 1 decimal
+      });
+    }
+    setAttendanceData(thirtyDaysData);
+  };
+
   // Function to generate enrollment report data
   const generateEnrollmentData = () => {
-    const data = {
-      totalStudents: teachers.reduce(
-        (sum, teacher) => sum + teacher.students,
-        0
-      ),
-      byGender: {
-        male: Math.round(
-          teachers.reduce((sum, teacher) => sum + teacher.students, 0) * 0.52
-        ),
-        female: Math.round(
-          teachers.reduce((sum, teacher) => sum + teacher.students, 0) * 0.48
-        ),
-      },
-      bySection: teachers.map((teacher) => ({
-        section: teacher.section,
-        count: teacher.students,
-      })),
-    };
+    // Filter by section and teacher if needed
+    let filteredTeachers = [...teachers];
 
-    // Apply section filter
     if (sectionFilter !== "all") {
-      data.bySection = data.bySection.filter(
-        (item) => item.section === sectionFilter
+      filteredTeachers = filteredTeachers.filter(
+        (t) => t.section === sectionFilter
       );
-      const filteredTeacher = teachers.find((t) => t.section === sectionFilter);
-      if (filteredTeacher) {
-        data.totalStudents = filteredTeacher.students;
-        data.byGender = {
-          male: Math.round(filteredTeacher.students * 0.52),
-          female: Math.round(filteredTeacher.students * 0.48),
-        };
-      }
     }
 
-    // Apply teacher filter
     if (teacherFilter !== "all") {
-      const filteredTeacher = teachers.find(
+      filteredTeachers = filteredTeachers.filter(
         (t) => t.id === parseInt(teacherFilter)
       );
-      if (filteredTeacher) {
-        data.bySection = [
-          {
-            section: filteredTeacher.section,
-            count: filteredTeacher.students,
-          },
-        ];
-        data.totalStudents = filteredTeacher.students;
-        data.byGender = {
-          male: Math.round(filteredTeacher.students * 0.52),
-          female: Math.round(filteredTeacher.students * 0.48),
-        };
-      }
     }
 
-    return data;
+    const totalStudents = filteredTeachers.reduce(
+      (sum, teacher) => sum + teacher.students,
+      0
+    );
+    const maleCount = Math.round(totalStudents * 0.52); // Assuming 52% male
+    const femaleCount = totalStudents - maleCount;
+
+    return {
+      totalStudents,
+      byGender: {
+        male: maleCount,
+        female: femaleCount,
+      },
+      bySection: filteredTeachers.map((teacher) => ({
+        section: teacher.section,
+        count: teacher.students,
+        teacher: teacher.name,
+      })),
+    };
   };
 
   // Function to generate attendance report data
   const generateAttendanceData = () => {
-    const data = {
+    // Filter by section and teacher if needed
+    let filteredTeachers = [...teachers];
+
+    if (sectionFilter !== "all") {
+      filteredTeachers = filteredTeachers.filter(
+        (t) => t.section === sectionFilter
+      );
+    }
+
+    if (teacherFilter !== "all") {
+      filteredTeachers = filteredTeachers.filter(
+        (t) => t.id === parseInt(teacherFilter)
+      );
+    }
+
+    const totalStudents = filteredTeachers.reduce(
+      (sum, teacher) => sum + teacher.students,
+      0
+    );
+    const averageAttendance = Math.round(
+      filteredTeachers.reduce((sum, teacher) => sum + teacher.attendance, 0) /
+        (filteredTeachers.length || 1)
+    );
+
+    return {
       summary: {
-        totalStudents: teachers.reduce(
-          (sum, teacher) => sum + teacher.students,
-          0
-        ),
-        averageAttendance: Math.round(
-          teachers.reduce((sum, teacher) => sum + teacher.attendance, 0) /
-            teachers.length
-        ),
+        totalStudents,
+        averageAttendance,
       },
-      bySection: teachers.map((teacher) => ({
+      bySection: filteredTeachers.map((teacher) => ({
         section: teacher.section,
         teacher: teacher.name,
         students: teacher.students,
         attendance: teacher.attendance,
       })),
     };
-
-    // Apply filters
-    if (sectionFilter !== "all") {
-      data.bySection = data.bySection.filter(
-        (item) => item.section === sectionFilter
-      );
-      if (data.bySection.length > 0) {
-        data.summary.totalStudents = data.bySection.reduce(
-          (sum, item) => sum + item.students,
-          0
-        );
-        data.summary.averageAttendance = data.bySection[0].attendance;
-      }
-    }
-
-    if (teacherFilter !== "all") {
-      const filteredTeacher = teachers.find(
-        (t) => t.id === parseInt(teacherFilter)
-      );
-      if (filteredTeacher) {
-        data.bySection = [
-          {
-            section: filteredTeacher.section,
-            teacher: filteredTeacher.name,
-            students: filteredTeacher.students,
-            attendance: filteredTeacher.attendance,
-          },
-        ];
-        data.summary.totalStudents = filteredTeacher.students;
-        data.summary.averageAttendance = filteredTeacher.attendance;
-      }
-    }
-
-    return data;
   };
 
   // Function to generate teacher performance report data
@@ -210,6 +259,44 @@ const Reports = () => {
     };
   };
 
+  // Function to generate nutritional status report data
+  const generateNutritionalData = () => {
+    // Filter by section and teacher if needed
+    let filteredTeachers = [...teachers];
+
+    if (sectionFilter !== "all") {
+      filteredTeachers = filteredTeachers.filter(
+        (t) => t.section === sectionFilter
+      );
+    }
+
+    if (teacherFilter !== "all") {
+      filteredTeachers = filteredTeachers.filter(
+        (t) => t.id === parseInt(teacherFilter)
+      );
+    }
+
+    const totalStudents = filteredTeachers.reduce(
+      (sum, teacher) => sum + teacher.students,
+      0
+    );
+
+    // Generate status distribution (percentages are approximate)
+    return {
+      totalStudents,
+      byStatus: [
+        { status: "Normal", count: Math.round(totalStudents * 0.6) }, // 60%
+        { status: "Underweight", count: Math.round(totalStudents * 0.14) }, // 14%
+        { status: "Overweight", count: Math.round(totalStudents * 0.12) }, // 12%
+        {
+          status: "Severely Underweight",
+          count: Math.round(totalStudents * 0.06),
+        }, // 6%
+        { status: "Obese", count: Math.round(totalStudents * 0.08) }, // 8%
+      ],
+    };
+  };
+
   // Get the appropriate data based on report type
   const getReportData = () => {
     switch (reportType) {
@@ -219,6 +306,8 @@ const Reports = () => {
         return generateAttendanceData();
       case "teachers":
         return generateTeacherData();
+      case "nutritional":
+        return generateNutritionalData();
       default:
         return null;
     }
@@ -253,8 +342,149 @@ const Reports = () => {
   return (
     <div className="reports">
       <div className="panel-header">
-        <h2>Grade 1 Reports</h2>
+        <h2>Grade 1 Reports and Analytics Dashboard</h2>
+        <div className="panel-actions">
+          <button
+            className="action-btn view-button"
+            onClick={() => setShowCharts(!showCharts)}
+          >
+            {showCharts ? "Hide Charts" : "Show Charts"}
+          </button>
+        </div>
       </div>
+
+      {showCharts && (
+        <div className="analytics-dashboard">
+          <div className="dashboard-summary">
+            <div className="summary-stats">
+              <div className="stat-box">
+                <h4>Total Students</h4>
+                <p className="stat-value">
+                  {teachers.reduce((sum, teacher) => sum + teacher.students, 0)}
+                </p>
+              </div>
+              <div className="stat-box">
+                <h4>Average Attendance</h4>
+                <p className="stat-value">
+                  {Math.round(
+                    teachers.reduce(
+                      (sum, teacher) => sum + teacher.attendance,
+                      0
+                    ) / teachers.length
+                  )}
+                  %
+                </p>
+              </div>
+              <div className="stat-box">
+                <h4>Average Performance</h4>
+                <p className="stat-value">
+                  {Math.round(
+                    teachers.reduce(
+                      (sum, teacher) => sum + teacher.performance,
+                      0
+                    ) / teachers.length
+                  )}
+                  %
+                </p>
+              </div>
+            </div>
+
+            <div className="charts-row">
+              <div className="chart-container">
+                <h4>Enrollment by Section</h4>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={enrollmentData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="students" fill="#8884d8" name="Students" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="chart-container">
+                <h4>Gender Distribution</h4>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={genderData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={true}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label={({ name, percent }) =>
+                        `${name}: ${(percent * 100).toFixed(0)}%`
+                      }
+                    >
+                      {genderData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [value, "Students"]} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="charts-row">
+              <div className="chart-container">
+                <h4>Nutritional Status</h4>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={nutritionalStatusData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="value" fill="#82ca9d" name="Students" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="chart-container">
+                <h4>Attendance Trend (Last 30 Days)</h4>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={attendanceData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="day"
+                      label={{
+                        value: "Day",
+                        position: "insideBottom",
+                        offset: -5,
+                      }}
+                    />
+                    <YAxis
+                      domain={[80, 100]}
+                      label={{
+                        value: "Attendance %",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="attendance"
+                      stroke="#8884d8"
+                      name="Attendance %"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="report-controls">
         <div className="report-type-selector">
@@ -269,6 +499,7 @@ const Reports = () => {
             <option value="enrollment">Enrollment Summary</option>
             <option value="attendance">Attendance Report</option>
             <option value="teachers">Teacher Performance</option>
+            <option value="nutritional">Nutritional Status</option>
           </select>
         </div>
 
@@ -283,11 +514,11 @@ const Reports = () => {
               }}
             >
               <option value="all">All Sections</option>
-              <option value="A">Section A</option>
-              <option value="B">Section B</option>
-              <option value="C">Section C</option>
-              <option value="D">Section D</option>
-              <option value="E">Section E</option>
+              {allSections.map((section) => (
+                <option key={section} value={section}>
+                  Section {section}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -378,10 +609,11 @@ const Reports = () => {
               <div className="enrollment-tables">
                 <div className="section-enrollment">
                   <h4>Enrollment by Section</h4>
-                  <table>
+                  <table className="report-table">
                     <thead>
                       <tr>
                         <th>Section</th>
+                        <th>Teacher</th>
                         <th>Total</th>
                       </tr>
                     </thead>
@@ -389,6 +621,7 @@ const Reports = () => {
                       {reportData.bySection.map((item) => (
                         <tr key={item.section}>
                           <td>Section {item.section}</td>
+                          <td>{item.teacher}</td>
                           <td>{item.count}</td>
                         </tr>
                       ))}
@@ -424,7 +657,7 @@ const Reports = () => {
               <div className="attendance-tables">
                 <div className="section-attendance">
                   <h4>Attendance by Section</h4>
-                  <table>
+                  <table className="report-table">
                     <thead>
                       <tr>
                         <th>Section</th>
@@ -466,7 +699,7 @@ const Reports = () => {
               <div className="teacher-tables">
                 <div className="teacher-performance">
                   <h4>Teacher Performance by Section</h4>
-                  <table>
+                  <table className="report-table">
                     <thead>
                       <tr>
                         <th>Teacher</th>
@@ -484,6 +717,51 @@ const Reports = () => {
                           <td>{teacher.students}</td>
                           <td>{teacher.attendance}%</td>
                           <td>{teacher.performance}%</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {reportType === "nutritional" && reportData && (
+            <div className="nutritional-report">
+              <h3>Grade 1 Nutritional Status Report</h3>
+              <p className="report-date">
+                Generated on: {new Date().toLocaleDateString()}
+              </p>
+
+              <div className="summary-stats">
+                <div className="stat-box">
+                  <h4>Total Students</h4>
+                  <p className="stat-value">{reportData.totalStudents}</p>
+                </div>
+              </div>
+
+              <div className="nutritional-tables">
+                <div className="nutritional-status">
+                  <h4>Nutritional Status Summary</h4>
+                  <table className="report-table">
+                    <thead>
+                      <tr>
+                        <th>Status</th>
+                        <th>Count</th>
+                        <th>Percentage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {reportData.byStatus.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.status}</td>
+                          <td>{item.count}</td>
+                          <td>
+                            {Math.round(
+                              (item.count / reportData.totalStudents) * 100
+                            )}
+                            %
+                          </td>
                         </tr>
                       ))}
                     </tbody>

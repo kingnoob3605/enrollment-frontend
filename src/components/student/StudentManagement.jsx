@@ -2,159 +2,221 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import StudentProfile from "./StudentProfile";
 import EnrollmentForm from "../teacher/EnrollmentForm";
+import exportStudentListToExcel from "../../utils/exportStudentListToExcel";
 
-const StudentManagement = ({ userType }) => {
+// Function to generate mock students for a specific section
+const generateSectionStudents = (section) => {
+  // Generate a random number of students between 40-49 for each section
+  const count = Math.floor(Math.random() * 10) + 40;
+  const students = [];
+  const firstNames = [
+    "John",
+    "Maria",
+    "Antonio",
+    "Sofia",
+    "Jose",
+    "Ana",
+    "Miguel",
+    "Elena",
+    "Pedro",
+    "Lucia",
+    "Carlos",
+    "Rosa",
+    "Daniel",
+    "Julia",
+    "David",
+    "Angela",
+    "Juan",
+    "Teresa",
+    "Luis",
+    "Marta",
+    "Manuel",
+    "Cristina",
+    "Pablo",
+    "Carmen",
+    "Alejandro",
+    "Isabel",
+    "Roberto",
+    "Patricia",
+    "Fernando",
+    "Laura",
+  ];
+
+  const lastNames = [
+    "Cruz",
+    "Reyes",
+    "Lim",
+    "Garcia",
+    "Santos",
+    "Gonzales",
+    "Rivera",
+    "Torres",
+    "Flores",
+    "Villanueva",
+    "Ramos",
+    "Mendoza",
+    "De Guzman",
+    "Aquino",
+    "Castro",
+    "Martinez",
+    "Rodriguez",
+    "Fernandez",
+    "Perez",
+    "Diaz",
+    "Morales",
+    "Navarro",
+    "Jimenez",
+    "Alvarez",
+    "Romero",
+    "Gomez",
+    "Hernandez",
+    "Sanchez",
+    "Ramirez",
+    "Vazquez",
+  ];
+
+  for (let i = 1; i <= count; i++) {
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const middleInitial = String.fromCharCode(
+      65 + Math.floor(Math.random() * 26)
+    );
+    const name = `${firstName} ${middleInitial}. ${lastName}`;
+
+    // Generate a unique LRN
+    const lrn = `1200010${section}${i.toString().padStart(3, "0")}`;
+
+    // Generate random height (110-130 cm) and weight (18-30 kg) for Grade 1 students
+    const height = Math.floor(Math.random() * 20) + 110;
+    const weight = Math.floor(Math.random() * 12) + 18;
+
+    // Calculate BMI
+    const heightInMeters = height / 100;
+    const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+    // Determine nutritional status based on BMI
+    let nutritionalStatus = "Normal";
+    if (bmi < 14) nutritionalStatus = "Severely Underweight";
+    else if (bmi < 15) nutritionalStatus = "Underweight";
+    else if (bmi > 19 && bmi < 21) nutritionalStatus = "Overweight";
+    else if (bmi >= 21) nutritionalStatus = "Obese";
+
+    // Generate random vision and hearing status
+    const vision = Math.random() < 0.1 ? "Needs Correction" : "Normal";
+    const hearing = Math.random() < 0.05 ? "Needs Assistance" : "Normal";
+
+    // Create the student object
+    students.push({
+      id: parseInt(`1${section.charCodeAt(0) - 64}${i}`), // Create unique ID
+      lrn: lrn,
+      name: name,
+      grade: "1",
+      section: section,
+      gender: Math.random() < 0.5 ? "Male" : "Female",
+      birthdate: `2018-${(Math.floor(Math.random() * 12) + 1)
+        .toString()
+        .padStart(2, "0")}-${(Math.floor(Math.random() * 28) + 1)
+        .toString()
+        .padStart(2, "0")}`,
+      address: `${Math.floor(Math.random() * 500) + 100} ${
+        ["Main St", "Rizal Ave", "Bonifacio St", "Mabini Ave", "Quezon Blvd"][
+          Math.floor(Math.random() * 5)
+        ]
+      }, Barangay ${
+        ["San Miguel", "Santa Cruz", "San Jose", "San Antonio", "San Roque"][
+          Math.floor(Math.random() * 5)
+        ]
+      }, City`,
+      parent_name: `${lastName}, ${
+        firstNames[Math.floor(Math.random() * firstNames.length)]
+      }`,
+      parent_contact: `09${Math.floor(Math.random() * 1000000000)
+        .toString()
+        .padStart(9, "0")}`,
+      parent_email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@example.com`,
+      status: "Enrolled",
+      date_enrolled: "2024-07-01",
+      teacher_assigned: `Teacher ${section}`,
+      height: height,
+      weight: weight,
+      bmi: bmi,
+      nutritional_status: nutritionalStatus,
+      vision: vision,
+      hearing: hearing,
+      vaccinations: Math.random() < 0.9 ? "Complete" : "Incomplete",
+      health: {
+        height: height,
+        weight: weight,
+        bmi: bmi,
+        vision: vision,
+        hearing: hearing,
+        vaccinations: Math.random() < 0.9 ? "Complete" : "Incomplete",
+      },
+    });
+  }
+
+  return students;
+};
+
+const StudentManagement = ({ userType, teacherSection }) => {
   const { currentUser } = useContext(AuthContext);
   const grade1Sections = ["A", "B", "C", "D", "E"];
 
-  // Mock student data
-  const [students, setStudents] = useState([
-    {
-      id: 1,
-      lrn: "120001001001",
-      name: "John M. Cruz",
-      grade: "1",
-      section: "A",
-      gender: "Male",
-      birthdate: "2018-05-15",
-      address: "123 Main St, Barangay San Miguel, City",
-      parent_name: "Cruz, Maria",
-      parent_contact: "09123456789",
-      status: "Enrolled",
-      date_enrolled: "2024-07-01",
-      teacher_assigned: "Teacher A",
-      height: 118,
-      weight: 22,
-      bmi: 15.8,
-      nutritional_status: "Normal",
-      vision: "Normal",
-      hearing: "Normal",
-      vaccinations: "Complete",
-      health: {
-        height: 118,
-        weight: 22,
-        bmi: 15.8,
-        vision: "Normal",
-        hearing: "Normal",
-        vaccinations: "Complete",
-      },
-    },
-    {
-      id: 2,
-      lrn: "120001001002",
-      name: "Maria S. Reyes",
-      grade: "1",
-      section: "A",
-      gender: "Female",
-      birthdate: "2018-07-22",
-      address: "456 Rizal Ave, Barangay Santa Cruz, City",
-      parent_name: "Reyes, Antonio",
-      parent_contact: "09234567890",
-      status: "Enrolled",
-      date_enrolled: "2024-07-01",
-      teacher_assigned: "Teacher A",
-      height: 115,
-      weight: 20,
-      bmi: 15.1,
-      nutritional_status: "Normal",
-      vision: "Normal",
-      hearing: "Normal",
-      vaccinations: "Complete",
-      health: {
-        height: 115,
-        weight: 20,
-        bmi: 15.1,
-        vision: "Normal",
-        hearing: "Normal",
-        vaccinations: "Complete",
-      },
-    },
-    {
-      id: 3,
-      lrn: "120001002001",
-      name: "Antonio B. Lim",
-      grade: "1",
-      section: "B",
-      gender: "Male",
-      birthdate: "2018-04-10",
-      address: "789 Bonifacio St, Barangay San Jose, City",
-      parent_name: "Lim, Sofia",
-      parent_contact: "09345678901",
-      status: "Enrolled",
-      date_enrolled: "2024-07-02",
-      teacher_assigned: "Teacher B",
-      height: 120,
-      weight: 23,
-      bmi: 16.0,
-      nutritional_status: "Normal",
-      vision: "Needs Correction",
-      hearing: "Normal",
-      vaccinations: "Complete",
-      health: {
-        height: 120,
-        weight: 23,
-        bmi: 16.0,
-        vision: "Needs Correction",
-        hearing: "Normal",
-        vaccinations: "Complete",
-      },
-    },
-  ]);
+  // Use the provided teacherSection or get it from currentUser if available
+  const assignedSection = teacherSection || currentUser?.section || null;
 
+  // Generate mock student data for all sections or just the teacher's section
+  const generateMockStudents = () => {
+    if (userType === "teacher" && assignedSection) {
+      // For teachers, only generate students for their assigned section
+      return generateSectionStudents(assignedSection);
+    } else {
+      // For admins, generate students for all sections
+      let allStudents = [];
+      grade1Sections.forEach((section) => {
+        allStudents = [...allStudents, ...generateSectionStudents(section)];
+      });
+      return allStudents;
+    }
+  };
+
+  // Mock student data
+  const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [filterSection, setFilterSection] = useState("");
+  const [filterSection, setFilterSection] = useState(assignedSection || "");
   const [filterTeacher, setFilterTeacher] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const [showCharts, setShowCharts] = useState(true);
-  const [totalStudents, setTotalStudents] = useState(50);
-  const [studentsBySection, setStudentsBySection] = useState({
-    A: 10,
-    B: 12,
-    C: 9,
-    D: 11,
-    E: 8,
-  });
+  const [showCharts, setShowCharts] = useState(false);
 
-  // Mock chart data
-  const [enrollmentData, setEnrollmentData] = useState([
-    { name: "Section A", students: 10 },
-    { name: "Section B", students: 12 },
-    { name: "Section C", students: 9 },
-    { name: "Section D", students: 11 },
-    { name: "Section E", students: 8 },
-  ]);
-
-  const [genderData, setGenderData] = useState([
-    { name: "Male", value: 26 },
-    { name: "Female", value: 24 },
-  ]);
-
-  const [bmiData, setBmiData] = useState([
-    { name: "Severely Underweight", value: 3 },
-    { name: "Underweight", value: 7 },
-    { name: "Normal", value: 30 },
-    { name: "Overweight", value: 6 },
-    { name: "Obese", value: 4 },
-  ]);
-
-  // Simulate API loading
+  // Initialize student data
   useEffect(() => {
+    const mockStudents = generateMockStudents();
+    setStudents(mockStudents);
+
+    // Simulate API loading
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [userType, assignedSection]);
 
-  // Set initial filter section based on teacher's assigned section
-  useEffect(() => {
-    if (userType === "teacher" && currentUser && currentUser.section) {
-      setFilterSection(currentUser.section);
-    }
-  }, [userType, currentUser]);
+  // Calculate total students
+  const totalStudents =
+    userType === "teacher" && assignedSection
+      ? students.filter((s) => s.section === assignedSection).length
+      : students.length;
+
+  // Calculate students by section
+  const studentsBySection = {};
+  grade1Sections.forEach((section) => {
+    studentsBySection[section] = students.filter(
+      (s) => s.section === section
+    ).length;
+  });
 
   // Handle adding a new student
   const handleAddStudent = (newStudent) => {
@@ -179,13 +241,6 @@ const StudentManagement = ({ userType }) => {
     // Add to students array
     setStudents([...students, studentData]);
     setShowAddForm(false);
-
-    // Update stats
-    setTotalStudents(totalStudents + 1);
-    setStudentsBySection({
-      ...studentsBySection,
-      [newStudent.section]: (studentsBySection[newStudent.section] || 0) + 1,
-    });
 
     alert("Student added successfully!");
   };
@@ -217,8 +272,8 @@ const StudentManagement = ({ userType }) => {
     <div className="student-management">
       <div className="panel-header">
         <h2>
-          {userType === "teacher" && currentUser && currentUser.section
-            ? `Grade 1 Section ${currentUser.section} Student Management`
+          {userType === "teacher" && assignedSection
+            ? `Grade 1 Section ${assignedSection} Student Management`
             : "Grade 1 Student Management"}
         </h2>
         <div className="panel-actions">
@@ -244,11 +299,29 @@ const StudentManagement = ({ userType }) => {
               {(userType === "admin" || userType === "teacher") && (
                 <button
                   className="action-btn export-button"
-                  onClick={() =>
-                    alert(
-                      "Export to Excel functionality would be implemented here"
-                    )
-                  }
+                  onClick={() => {
+                    // Prepare school info object
+                    const schoolInfo = {
+                      schoolId: "123456",
+                      schoolName: "Elementary School Learners Profile System",
+                      division: "Zamboanga del Sur",
+                      district: "District 1",
+                      region: "Region VIII",
+                      schoolYear: "2024-2025",
+                    };
+
+                    // Get appropriate section for export
+                    const sectionToExport =
+                      filterSection || assignedSection || "";
+
+                    // Call the export function with filtered students
+                    exportStudentListToExcel(
+                      filteredStudents, // Only export filtered students
+                      schoolInfo,
+                      sectionToExport,
+                      "1" // Hardcoded to Grade 1 as per the application's scope
+                    );
+                  }}
                 >
                   Export to SF1 Excel
                 </button>
@@ -271,10 +344,8 @@ const StudentManagement = ({ userType }) => {
               <div className="summary-stats">
                 <div className="stat-box">
                   <h4>
-                    {userType === "teacher" &&
-                    currentUser &&
-                    currentUser.section
-                      ? `Total Section ${currentUser.section} Students`
+                    {userType === "teacher" && assignedSection
+                      ? `Total Section ${assignedSection} Students`
                       : "Total Grade 1 Students"}
                   </h4>
                   <p className="stat-value">{totalStudents}</p>
@@ -282,21 +353,30 @@ const StudentManagement = ({ userType }) => {
                 <div className="stat-box">
                   <h4>Male Students</h4>
                   <p className="stat-value">
-                    {students.filter((s) => s.gender === "Male").length}
+                    {userType === "teacher" && assignedSection
+                      ? students.filter(
+                          (s) =>
+                            s.section === assignedSection && s.gender === "Male"
+                        ).length
+                      : students.filter((s) => s.gender === "Male").length}
                   </p>
                 </div>
                 <div className="stat-box">
                   <h4>Female Students</h4>
                   <p className="stat-value">
-                    {students.filter((s) => s.gender === "Female").length}
+                    {userType === "teacher" && assignedSection
+                      ? students.filter(
+                          (s) =>
+                            s.section === assignedSection &&
+                            s.gender === "Female"
+                        ).length
+                      : students.filter((s) => s.gender === "Female").length}
                   </p>
                 </div>
               </div>
 
-              {/* Section breakdown for admins or all teachers */}
-              {(userType === "admin" ||
-                (userType === "teacher" &&
-                  (!currentUser || !currentUser.section))) && (
+              {/* Section breakdown for admins only */}
+              {userType === "admin" && (
                 <div className="section-summary">
                   <h4>Students by Section</h4>
                   <div className="section-grid">
@@ -330,10 +410,8 @@ const StudentManagement = ({ userType }) => {
                   </div>
 
                   <div className="filter-controls">
-                    {/* Section filter (if not a teacher with assigned section) */}
-                    {(userType !== "teacher" ||
-                      !currentUser ||
-                      !currentUser.section) && (
+                    {/* Section filter for admins only */}
+                    {userType === "admin" && (
                       <div className="filter-group">
                         <label>Section:</label>
                         <select
@@ -350,28 +428,25 @@ const StudentManagement = ({ userType }) => {
                       </div>
                     )}
 
-                    {/* Teacher filter */}
-                    {(userType !== "teacher" ||
-                      !currentUser ||
-                      !currentUser.section) &&
-                      teachers.length > 0 && (
-                        <div className="filter-group">
-                          <label>Teacher:</label>
-                          <select
-                            value={filterTeacher}
-                            onChange={(e) => setFilterTeacher(e.target.value)}
-                          >
-                            <option value="">All Teachers</option>
-                            {teachers.map((teacher) => (
-                              <option key={teacher} value={teacher}>
-                                {teacher}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
+                    {/* Teacher filter for admins only */}
+                    {userType === "admin" && teachers.length > 0 && (
+                      <div className="filter-group">
+                        <label>Teacher:</label>
+                        <select
+                          value={filterTeacher}
+                          onChange={(e) => setFilterTeacher(e.target.value)}
+                        >
+                          <option value="">All Teachers</option>
+                          {teachers.map((teacher) => (
+                            <option key={teacher} value={teacher}>
+                              {teacher}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
 
-                    {/* Status filter */}
+                    {/* Status filter available to all */}
                     <div className="filter-group">
                       <label>Status:</label>
                       <select
@@ -393,8 +468,7 @@ const StudentManagement = ({ userType }) => {
                       <th>LRN</th>
                       <th>Name</th>
                       <th>Section</th>
-                      <th>Teacher</th>
-                      <th>Date</th>
+                      <th>Gender</th>
                       <th>Status</th>
                       <th>Actions</th>
                     </tr>
@@ -408,14 +482,7 @@ const StudentManagement = ({ userType }) => {
                           <td>
                             {student.grade}-{student.section}
                           </td>
-                          <td>{student.teacher_assigned}</td>
-                          <td>
-                            {student.date_enrolled
-                              ? new Date(
-                                  student.date_enrolled
-                                ).toLocaleDateString()
-                              : "N/A"}
-                          </td>
+                          <td>{student.gender}</td>
                           <td>{student.status}</td>
                           <td>
                             <button
@@ -429,7 +496,7 @@ const StudentManagement = ({ userType }) => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="7" className="no-results">
+                        <td colSpan="6" className="no-results">
                           No students found
                         </td>
                       </tr>
@@ -446,8 +513,8 @@ const StudentManagement = ({ userType }) => {
               onSave={handleAddStudent}
               defaultGrade="1"
               sections={
-                userType === "teacher" && currentUser && currentUser.section
-                  ? [currentUser.section]
+                userType === "teacher" && assignedSection
+                  ? [assignedSection]
                   : grade1Sections
               }
             />

@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 import StudentManagement from "../student/StudentManagement";
 import EnrollmentForm from "./EnrollmentForm";
-import Reports from "../admin/Reports";
+import TeacherReports from "./TeacherReports";
 
 const TeacherDashboard = () => {
   const [activeTab, setActiveTab] = useState("students");
+  const { currentUser } = useContext(AuthContext);
+
+  // Extract teacher's section from currentUser
+  const teacherSection = currentUser?.section || "A";
 
   return (
     <div className="dashboard">
@@ -33,9 +38,18 @@ const TeacherDashboard = () => {
       </div>
 
       <div className="content">
-        {activeTab === "students" && <StudentManagement userType="teacher" />}
-        {activeTab === "enrollment" && <EnrollmentForm />}
-        {activeTab === "reports" && <Reports />}
+        {activeTab === "students" && (
+          <StudentManagement
+            userType="teacher"
+            teacherSection={teacherSection}
+          />
+        )}
+        {activeTab === "enrollment" && (
+          <EnrollmentForm teacherSection={teacherSection} />
+        )}
+        {activeTab === "reports" && (
+          <TeacherReports teacherSection={teacherSection} />
+        )}
       </div>
     </div>
   );
