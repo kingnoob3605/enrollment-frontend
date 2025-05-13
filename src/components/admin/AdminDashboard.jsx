@@ -259,7 +259,7 @@ const AdminDashboard = () => {
               </div>
 
               <div className="summary-card-item">
-                <div className="summary-icon enrolled-icon">📝</div>
+                <div className="summary-icon enrolled-icon"></div>
                 <div className="summary-details">
                   <h3>Enrolled</h3>
                   <p className="summary-value">{totalStudents}</p>
